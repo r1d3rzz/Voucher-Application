@@ -1,6 +1,6 @@
 import AuthLayout from "../features/auth/components/AuthLayout";
-import LoginPage from "../features/auth/page/LoginPage";
-import RegisterPage from "../features/auth/page/RegisterPage";
+import LoginPage from "../features/auth/pages/LoginPage";
+import RegisterPage from "../features/auth/pages/RegisterPage";
 
 const AuthRoutes = [
   {
