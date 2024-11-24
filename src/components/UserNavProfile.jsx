@@ -1,10 +1,12 @@
 import Avvvatars from "avvvatars-react";
-import useCookie from "react-use-cookie";
-import LogoutBtn from "./LogoutBtn";
+import { Link } from "react-router-dom";
+import useUserStore from "../store/useUserStore";
 
 const UserNavProfile = () => {
-  const [user] = useCookie("auth_user");
-  const authUser = JSON.parse(user);
+  let {
+    user: { name, email, profile_image },
+  } = useUserStore();
+
   return (
     <div className="flex items-center me-2">
       <button
@@ -16,14 +18,14 @@ const UserNavProfile = () => {
         data-dropdown-placement="bottom"
       >
         <span className="sr-only">Open user menu</span>
-        {authUser.profile_image !== null ? (
+        {profile_image !== null ? (
           <img
             className="w-8 h-8 rounded-full"
-            src={user.profile_image}
+            src={profile_image}
             alt="user photo"
           />
         ) : (
-          <Avvvatars value={authUser.email} />
+          <Avvvatars value={email} />
         )}
       </button>
       {/* Dropdown menu */}
@@ -33,20 +35,20 @@ const UserNavProfile = () => {
       >
         <div className="px-4 py-3">
           <span className="block text-sm text-gray-900 dark:text-white">
-            {authUser.name}
+            {name}
           </span>
           <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-            {authUser.email}
+            {email}
           </span>
         </div>
         <ul className="py-2" aria-labelledby="user-menu-button">
           <li>
-            <a
-              href="#"
+            <Link
+              to={"/profile"}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
             >
               Profile
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
