@@ -10,15 +10,15 @@ const HomePage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-2">
         <div className="col-span-1">
           <ActionBtn
-            redirect="/about-us"
+            redirect="/products"
             name={"Products"}
             icon={<HiDatabase size={80} />}
           />
         </div>
         <div className="col-span-1">
           <ActionBtn
-            redirect="/about-us"
-            name={"Products"}
+            redirect="/sales"
+            name={"Sales"}
             icon={<HiWindow size={80} />}
           />
         </div>
