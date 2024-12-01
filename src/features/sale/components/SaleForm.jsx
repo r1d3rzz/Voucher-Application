@@ -3,11 +3,10 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { waveform } from "ldrs";
 import useCookie from "react-use-cookie";
-import useSaleStore from "../../../store/useSaleStore";
 
-const SaleForm = () => {
+const SaleForm = ({salesListHandler}) => {
   let [isAdding, setIsAdding] = useState(false);
-  const { setSale } = useSaleStore();
+
   const [token] = useCookie("my_token");
   waveform.register();
   const api = import.meta.env.VITE_API_URL;
@@ -21,15 +20,31 @@ const SaleForm = () => {
     api + "/products?limit=100",
     productFetcher
   );
+
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setIsAdding(true);
-    setSale(data);
+    let res = await fetch(api+ "/products/" + data?.productId,{
+      type: "GET",
+      headers: {
+        "Content-Type" : "application/json", 
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    let result = await res.json();
+    let product = {
+      product: result.data,
+      quantity: parseInt(data?.qty),
+    }
+    setIsAdding(false);
+    salesListHandler(product);
+    reset();
   };
 
   return (

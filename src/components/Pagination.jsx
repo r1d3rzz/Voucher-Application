@@ -17,15 +17,15 @@ const Pagination = ({
       <div>
         <span className="text-sm text-gray-700 dark:text-gray-400">
           Showing{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900 dark:text-slate-800">
             {from}
           </span>{" "}
           to{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900 dark:text-slate-800">
             {to}
           </span>{" "}
           of{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900 dark:text-slate-800">
             {total}
           </span>{" "}
           Entries
@@ -48,12 +48,12 @@ const Pagination = ({
                         : ""
                     }
                     flex items-center ${
-                      link.active ? "bg-blue-500 text-white" : ""
+                      link.active ? "bg-blue-500 text-slate-800" : ""
                     } justify-center px-3 ${
                       link.url === null && "opacity-50 cursor-not-allowed"
-                    } h-8 leading-tight text-gray-500 bg-white border border-gray-300 ${
+                    } h-8 leading-tight text-gray-500 bg-slatetext-slate-800 border border-gray-300 ${
                       !link.active &&
-                      "hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white"
+                      "hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-slate-800"
                     } dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 `}
                   >
                     {link.label === "Next &raquo;"

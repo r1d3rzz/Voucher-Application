@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { HiTrash } from "react-icons/hi2";
 import EmptySaleList from "./EmptySaleList";
 import SingleSaleRecord from "./SingleSaleRecord";
-import useSaleStore from "../../../store/useSaleStore";
 import CalculateTotalSaleRecords from "./CalculateTotalSaleRecords";
 
-const SaleRecords = () => {
-  const { salesList } = useSaleStore();
+const SaleRecords = ({salesList, total}) => {
+  const totalPrice = total.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0,
+  );
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -24,11 +26,14 @@ const SaleRecords = () => {
             <th scope="col" className="px-6 py-3">
               Total
             </th>
+            <th scope="col" className="px-6 py-3">
+              
+            </th>
           </tr>
         </thead>
         <tbody>
-          <CalculateTotalSaleRecords />
-          {salesList.length ? <SingleSaleRecord /> : <EmptySaleList />}
+          {salesList.length ? salesList.map((saleRecord,index) => (<SingleSaleRecord  saleRecord = {saleRecord} key={index}/>)) : <EmptySaleList />}
+          <CalculateTotalSaleRecords totalPrice={totalPrice} />
         </tbody>
       </table>
     </div>

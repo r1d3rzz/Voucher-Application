@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
-const CalculateTotalSaleRecords = () => {
+const CalculateTotalSaleRecords = ({totalPrice}) => {
   const [tax, setTax] = useState(7);
+  const totalTax = totalPrice * (tax / 100);
+  const netTotal = totalPrice + totalTax;
   return (
     <>
       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 duration-75">
@@ -12,7 +14,8 @@ const CalculateTotalSaleRecords = () => {
         >
           Total
         </th>
-        <td className="px-6 py-4">0</td>
+        <td className="px-6 py-4">$ {totalPrice.toFixed(2)}</td>
+        <td className="px-6 py-4"></td>
       </tr>
       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 duration-75">
         <th
@@ -22,7 +25,8 @@ const CalculateTotalSaleRecords = () => {
         >
           Tax <small className="small">( {tax}% )</small>
         </th>
-        <td className="px-6 py-4">0</td>
+        <td className="px-6 py-4">$ {totalTax.toFixed(2)}</td>
+        <td className="px-6 py-4"></td>
       </tr>
       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 duration-75">
         <th
@@ -32,7 +36,8 @@ const CalculateTotalSaleRecords = () => {
         >
           Net Total
         </th>
-        <td className="px-6 py-4">0</td>
+        <td className="px-6 py-4">$ {netTotal.toFixed(2)}</td>
+        <td className="px-6 py-4"></td>
       </tr>
     </>
   );
