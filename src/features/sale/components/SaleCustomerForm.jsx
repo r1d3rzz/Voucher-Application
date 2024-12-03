@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
+import useSaleStore from "../../../store/useSaleStore.js";
 
 const SaleCustomerForm = ({ total }) => {
-  const endPoint = import.meta.env.VITE_URL_API;
-  const [token] = useCookie("token");
+  const navigation = useNavigate();
+  const tax = 7/100;
+  const totalPrice = total.reduce((b, a) =>  a + b, 0);
+  const totalTax = totalPrice * tax;
+  const netTotalPrice = totalPrice + totalTax;
+
+  const api = import.meta.env.VITE_API_URL;
+  const [token] = useCookie("my_token");
   const navigate = useNavigate();
+  const {salesList, resetSalesList} = useSaleStore();
+
   const [currentDate, setCurrentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
@@ -21,44 +30,60 @@ const SaleCustomerForm = ({ total }) => {
     const randomNumber = String(Math.floor(Math.random() * 100000000)).padStart(
       8,
       "0"
-    );
-    return `inv-${currentDate}-${randomNumber}`;
+    ).substring(0,4);
+    return `INV-${currentDate}-${randomNumber}`;
   };
 
   const { handleSubmit, register, reset } = useForm();
   useEffect(() => {
-    const invNumber = generateVoucherNumber();
-    setInvoiceNumber(invNumber);
+    setInvoiceNumber(generateVoucherNumber());
   }, []);
 
   const onSubmit = async (data) => {
-    const voucherData = {};
+    const storeData = {
+      voucher_id: invoiceNumber,
+      customer_name: data.customer_name,
+      customer_email: data.customer_email,
+      sale_date: data.sale_date,
+      records: salesList,
+      total: parseFloat(totalPrice.toFixed(2)),
+      tax: parseFloat(totalTax.toFixed(2)),
+      net_total: parseFloat(netTotalPrice.toFixed(2)),
+    };
 
-    let res = await fetch(endPoint + "/vouchers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(voucherData),
-    });
+    if(data.all_correct){
+      let res = await fetch(api + "/vouchers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(storeData),
+      });
 
-    if (res.status === 201) {
-      reset();
-      toast.success("Voucher Created Success.");
-      if (data.isRedirect) navigate("/dashboard/vouchers");
-    } else {
-      let errorMessage = JSON.parse(await res.text());
-      toast.error(errorMessage.message);
+      const result = await res.json();
+
+      if (res.status === 201) {
+        reset();
+        resetSalesList();
+        toast.success(result.message);
+        if(data.isRedirect){
+          setTimeout(()=>{
+            navigate("/products");
+          }, 500);
+        }
+      }else{
+        toast.error(result.message);
+      }
+    }else{
+      toast.error("Please confirm all correct.");
     }
-
-    const invNumber = generateVoucherNumber();
-    setInvoiceNumber(invNumber);
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Toaster/>
       <div className="flex flex-col gap-3">
         <div className="max-w-sm">
           <label
@@ -155,7 +180,7 @@ const SaleCustomerForm = ({ total }) => {
           </div>
         </div>
         <div>
-          <button className="size-10 w-[150px] flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+          <button type={"submit"} className="size-10 w-[150px] flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
             Submit
           </button>
         </div>

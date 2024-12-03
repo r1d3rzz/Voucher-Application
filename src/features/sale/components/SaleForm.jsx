@@ -39,9 +39,18 @@ const SaleForm = ({salesListHandler}) => {
 
     let result = await res.json();
     let product = {
-      product: result.data,
+      product: {
+        id: result.data.id,
+        product_name: result.data.product_name,
+        price: result.data.price,
+        created_at: result.data.created_at,
+      },
       quantity: parseInt(data?.qty),
+      cost: parseFloat((result.data.price * data?.qty).toFixed(2)),
+      created_at: new Date().toISOString(),
+      product_id: result.data.id,
     }
+
     setIsAdding(false);
     salesListHandler(product);
     reset();

@@ -23,7 +23,7 @@ const SalePage = () => {
           <SaleRecords salesList = {salesList} total={total} />
         </div>
         <div className="col-span-1">
-          <SaleCustomerForm />
+          <SaleCustomerForm total={total}/>
         </div>
       </div>
     </Container>

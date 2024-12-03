@@ -3,9 +3,7 @@ import { create } from "zustand";
 const useSaleStore = create((set) => ({
   salesList: [],
 
-  // Add or update sale
-  setSale: (data) =>
-    set((state) => {
+  setSale: (data) => set((state) => {
       const productIndex = state.salesList.findIndex(
         (record) => record.product.id === data.product.id
       );
@@ -23,9 +21,7 @@ const useSaleStore = create((set) => ({
       }
     }),
 
-  // Change quantity
-  changeQty: (id, qty) =>
-    set((state) => {
+  changeQty: (id, qty) => set((state) => {
       const updatedSalesList = state.salesList.map((saleList) => {
         if (saleList.product.id === id) {
           return { ...saleList, quantity: saleList.quantity + qty };
@@ -35,12 +31,16 @@ const useSaleStore = create((set) => ({
       
       return { salesList: updatedSalesList };
     }),
-    removeRecord: (id) => set((state) => {
+
+  removeRecord: (id) => set((state) => {
       const updateSaleList = state.salesList.filter((record) => {
         return record.product.id !== id
       });
       return { salesList: updateSaleList };
     }),
+
+  resetSalesList: () => set((state) => ({salesList: []})),
+
 }));
 
 export default useSaleStore;
