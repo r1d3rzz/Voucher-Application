@@ -5,6 +5,7 @@ import DashboardRoutes from "./DashboardRoutes";
 import userProfileRoutes from "./UserProfileRoutes";
 import ProductRoutes from "./ProductRoutes";
 import SaleRoutes from "./SaleRoutes";
+import VoucherRoutes from "./VoucherRoutes";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       ...userProfileRoutes,
       ...ProductRoutes,
       ...SaleRoutes,
+      ...VoucherRoutes,
     ],
   },
   ...AuthRoutes,

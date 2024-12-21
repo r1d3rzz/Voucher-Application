@@ -24,8 +24,8 @@ const HomePage = () => {
         </div>
         <div className="col-span-1">
           <ActionBtn
-            redirect="/about-us"
-            name={"Products"}
+            redirect="/vouchers"
+            name={"Vouchers"}
             icon={<HiDocument size={80} />}
           />
         </div>
