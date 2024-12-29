@@ -4,6 +4,7 @@ import { HiArrowLeft } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import SingleItem from "./SingleItem";
 import Items from "./Items";
+import printJS from "print-js";
 
 const VoucherDetailSlip = ({
   voucherDetail: {
@@ -16,9 +17,67 @@ const VoucherDetailSlip = ({
     net_total,
   },
 }) => {
+  const printVoucherSlipBtn = () => {
+    const voucherSlipHtml = document.getElementById("voucherSlip").outerHTML;
+
+    // Include Tailwind styles and custom print styles for A5
+    const tailwindStyles = `
+      @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+  
+      @page {
+        size: A5;
+        margin: 10mm; /* Adjust margins as needed */
+      }
+  
+      body {
+        font-family: 'Inter', sans-serif;
+        width: 148mm; /* A5 width */
+        height: 210mm; /* A5 height */
+        overflow: hidden;
+      }
+  
+      .print-hidden {
+        display: none;
+      }
+  
+      .text-center {
+        text-align: center;
+      }
+  
+      .font-bold {
+        font-weight: bold;
+      }
+  
+      .border {
+        border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+      }
+  
+      .p-4 {
+        padding: 1rem;
+      }
+  
+      /* Optional: Adjust table layout for print */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+  
+      th, td {
+        padding: 8px;
+        border: 1px solid #ddd; /* Light border for table */
+      }
+    `;
+
+    printJS({
+      printable: `<div>${voucherSlipHtml}</div>`,
+      type: "raw-html", // Use raw HTML for printing
+      style: tailwindStyles,
+    });
+  };
+
   return (
     <div className="my-[50px] flex justify-center">
-      <div className="w-[148mm] h-[auto] p-8 mx-auto bg-white ">
+      <div className="w-[148mm] h-[auto] p-8 mx-auto bg-white" id="voucherSlip">
         {/* Company Header */}
         <div className="text-center mb-8">
           <h1 className="text-xl font-bold mb-2">Rider Company</h1>
@@ -91,6 +150,7 @@ const VoucherDetailSlip = ({
 
         <button
           type="button"
+          onClick={printVoucherSlipBtn}
           className="text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2"
         >
           <HiOutlinePrinter size={25} />

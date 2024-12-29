@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import useSaleStore from "../../../store/useSaleStore.js";
+import useSaleTotalPrice from "../../../store/useSaleTotalPrice.js";
 
 const SaleCustomerForm = ({ total }) => {
   const navigation = useNavigate();
@@ -16,7 +17,7 @@ const SaleCustomerForm = ({ total }) => {
   const [token] = useCookie("my_token");
   const navigate = useNavigate();
   const { salesList, resetSalesList } = useSaleStore();
-
+  const { resetTotal } = useSaleTotalPrice();
   const [currentDate, setCurrentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
@@ -65,11 +66,13 @@ const SaleCustomerForm = ({ total }) => {
 
       if (res.status === 201) {
         reset();
+        resetTotal();
         resetSalesList();
+        setInvoiceNumber(generateVoucherNumber());
         toast.success(result.message);
         if (data.isRedirect) {
           setTimeout(() => {
-            navigate("/products");
+            navigate("/vouchers");
           }, 500);
         }
       } else {
@@ -168,7 +171,7 @@ const SaleCustomerForm = ({ total }) => {
               htmlFor="isRedirect"
               className="text-sm text-gray-500 me-3 dark:text-neutral-400"
             >
-              Redirect for Voucher Detail.
+              Redirect for Vouchers List.
             </label>
             <input
               type="checkbox"
